@@ -66,7 +66,7 @@ defmodule Imageflow.Integration.GraphTest do
              |> Graph.encode_to_buffer()
              |> Graph.run()
 
-    assert is_list(data)
+    assert is_binary(data)
     assert File.write!(@output_path, data)
 
     assert {"image/png", 273, 185, "PNG"} ==

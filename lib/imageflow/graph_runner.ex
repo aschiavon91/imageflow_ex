@@ -73,6 +73,7 @@ defmodule Imageflow.GraphRunner do
     end
     |> case do
       :ok -> {:cont, :ok}
+      {:ok, data} when is_list(data) -> {:cont, {:ok, :binary.list_to_bin(data)}}
       {:ok, data} -> {:cont, {:ok, data}}
       {:error, _} = error -> {:halt, error}
     end
