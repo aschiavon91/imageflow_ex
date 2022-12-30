@@ -1,4 +1,8 @@
 defmodule Imageflow.NIF do
+  @moduledoc """
+  The nif API
+  """
+
   use Rustler, otp_app: :imageflow, crate: :imageflow_ex
 
   def get_long_version_string(), do: error()

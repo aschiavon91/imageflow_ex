@@ -623,6 +623,7 @@ dependencies = [
  "imageflow_core",
  "imageflow_types",
  "lazy_static",
+ "log",
  "rustler",
 ]
 

@@ -26,7 +26,9 @@ defmodule Imageflow.MixProject do
     [
       {:rustler, "~> 0.26.0"},
       {:jason, "~> 1.4.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:ex_image_info, "~> 0.2.4", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.6", runtime: false, only: [:dev, :test]}
     ]
   end
 
