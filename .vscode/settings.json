@@ -1,0 +1,3 @@
+{
+  "rust-analyzer.linkedProjects": [ "native/imageflow_ex/Cargo.toml" ]
+}

@@ -11,7 +11,7 @@ defmodule Imageflow.MixProject do
       start_permanent: Mix.env() == :prod,
       rustler_crates: rustler_crates(),
       deps: deps(),
-      compilers: [:rustler] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       description: description(),
       package: package(),
       docs: docs()
@@ -24,9 +24,11 @@ defmodule Imageflow.MixProject do
 
   defp deps do
     [
-      {:rustler, "~> 0.21.1"},
-      {:jason, "~> 1.2"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:rustler, "~> 0.26.0"},
+      {:jason, "~> 1.4.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:ex_image_info, "~> 0.2.4", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.6", runtime: false, only: [:dev, :test]}
     ]
   end
 

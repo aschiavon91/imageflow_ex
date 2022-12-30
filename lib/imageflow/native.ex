@@ -22,24 +22,27 @@ defmodule Imageflow.Native do
   alias Imageflow.NIF
 
   @type t :: %__MODULE__{}
-  @type native_ret_t :: :ok | {:error, binary}
+  @type native_ret_t :: {:ok, term()} | {:error, atom()}
 
   defstruct id: nil
 
-  @spec create :: {:ok, t}
+  @spec create :: native_ret_t
   def create do
-    {:ok, id} = NIF.job_create()
-
-    {:ok, %__MODULE__{id: id}}
+    case NIF.job_create() do
+      {:ok, id} -> {:ok, %__MODULE__{id: id}}
+      err -> err
+    end
   end
 
-  @spec create! :: t
+  @spec create! :: term | no_return()
   def create! do
-    {:ok, job} = __MODULE__.create()
-
-    job
+    case create() do
+      {:ok, job} -> job
+      err -> raise RuntimeError, err
+    end
   end
 
+  @spec destroy(t()) :: native_ret_t
   def destroy(%__MODULE__{id: id}), do: NIF.job_destroy(id)
 
   @spec add_input_buffer(t, number, binary) :: native_ret_t

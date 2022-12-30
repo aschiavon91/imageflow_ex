@@ -21,9 +21,9 @@ defmodule Imageflow.NativeTest do
 
   describe "destroy/1" do
     test "can destroy existing jobs" do
-      job = Native.create!()
+      {:ok, job} = Native.create()
 
-      assert :ok = Native.destroy(job)
+      assert {:ok, :job_destroyed} = Native.destroy(job)
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Imageflow.NativeTest do
     test "allows input bytes to be added and image width queried" do
       job = Native.create!()
 
-      assert :ok = Native.add_input_buffer(job, 0, @img)
+      assert {:ok, :input_buffer_added} = Native.add_input_buffer(job, 0, @img)
       assert {:ok, resp} = Native.message(job, "v0.1/get_image_info", %{io_id: 0})
       assert get_in(resp, ["success"]) == true
       assert get_in(resp, ["code"]) == 200
@@ -47,8 +47,8 @@ defmodule Imageflow.NativeTest do
     test "allows image to be upscaled" do
       job = Native.create!()
 
-      assert :ok = Native.add_input_buffer(job, 0, @img)
-      assert :ok = Native.add_output_buffer(job, 1)
+      assert {:ok, :input_buffer_added} = Native.add_input_buffer(job, 0, @img)
+      assert {:ok, :output_buffer_added} = Native.add_output_buffer(job, 1)
 
       task = %{
         "framewise" => %{
@@ -90,7 +90,7 @@ defmodule Imageflow.NativeTest do
     test "allows input file to be added and image size queried" do
       job = Native.create!()
 
-      :ok = Native.add_input_file(job, 0, @img_path)
+      {:ok, :input_file_added} = Native.add_input_file(job, 0, @img_path)
       {:ok, resp} = Native.message(job, "v0.1/get_image_info", %{io_id: 0})
 
       assert get_in(resp, ["success"]) == true
@@ -102,8 +102,8 @@ defmodule Imageflow.NativeTest do
     test "allows image file to be downscaled and save to new file" do
       job = Native.create!()
 
-      :ok = Native.add_input_file(job, 0, @img_path)
-      :ok = Native.add_output_buffer(job, 1)
+      {:ok, :input_file_added} = Native.add_input_file(job, 0, @img_path)
+      {:ok, :output_buffer_added} = Native.add_output_buffer(job, 1)
 
       task = %{
         "framewise" => %{
@@ -132,10 +132,10 @@ defmodule Imageflow.NativeTest do
       }
 
       {:ok, %{"success" => true}} = Native.message(job, "v0.1/execute", task)
-      :ok = Native.save_output_to_file(job, 1, "/tmp/output.png")
+      {:ok, :output_file_saved} = Native.save_output_to_file(job, 1, "/tmp/output.png")
 
       job = Native.create!()
-      :ok = Native.add_input_file(job, 0, "/tmp/output.png")
+      {:ok, :input_file_added} = Native.add_input_file(job, 0, "/tmp/output.png")
       {:ok, resp} = Native.message(job, "v0.1/get_image_info", %{io_id: 0})
 
       assert get_in(resp, ["data", "image_info", "image_width"]) == 50
